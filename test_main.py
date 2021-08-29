@@ -4,28 +4,14 @@ from setup import DriverSetup as Browser
 import pandas as pd
 
 
-class TestShareLogin(unittest.TestCase):
+class Test_A_ShareLogin(unittest.TestCase):
     """ Retrieve BugMeNot webpage share login """
-    @classmethod
-    def setUpClass(cls):
-        """ Setup class for Webdriver tests """
-        cls.url = Browser.page.url(url=input('[URL] : '))
 
     def setUp(self):
         """ Wait for amount of time each test """
         Browser.page.implicitly_wait()
 
-    def test_page(self):
-        """ Access BugMeNot page """
-        try:
-            self.assertEqual(Browser.driver.title[-8:], 'BugMeNot')
-
-        except selenium.common.exceptions.WebDriverException:
-            """ Close browser on failure """
-            Browser().close_browser()
-
-    @classmethod
-    def test_not_found(cls):
+    def test_A_not_found(self):
         """ Seek 'not found' response """
         try:
             Browser.page.not_found()
@@ -33,8 +19,7 @@ class TestShareLogin(unittest.TestCase):
         except selenium.common.exceptions.TimeoutException:
             """ 'Not found' response not found """
 
-    @classmethod
-    def test_denied(cls):
+    def test_B_denied(self):
         """ Seek 'denied' response """
         try:
             Browser.page.denied()
@@ -42,34 +27,36 @@ class TestShareLogin(unittest.TestCase):
         except selenium.common.exceptions.TimeoutException:
             """ Denied response not found """
 
-    def test_username(self):
+    def test_C_username(self):
         """ Assert usernames """
         for username in Browser.page.username():
             self.assertIsNotNone(username)
 
-    def test_password(self):
+    def test_D_password(self):
         """ Assert passwords """
         for password in Browser.page.password():
             self.assertIsNotNone(password)
 
-    def test_success_rate(self):
+    def test_E_success_rate(self):
         """ Assert success rate """
         for success_rate in Browser.page.success_rate():
             self.assertIsNotNone(success_rate)
 
-    def test_votes(self):
+    def test_F_votes(self):
         """ Assert votes """
         for votes in Browser.page.votes():
             self.assertIsNotNone(votes)
 
-    def test_login_age(self):
+    def test_G_login_age(self):
         """ Assert login ages """
         for login_age in Browser.page.login_age():
             self.assertIsNotNone(login_age)
 
-    def test_table_creation(self):
-        """ Create a table based on Username and Password results """
 
+class Test_B_Table(unittest.TestCase):
+    """ Create a table based on Username and Password results """
+
+    def test_A_create_table(self):
         """ Store login information in arrays"""
         username_row = []
         for username in Browser.page.username():
@@ -110,7 +97,7 @@ class TestShareLogin(unittest.TestCase):
             """ Save table as file in 'report' folder
             Format example: 'test_com.html' """
 
-            file_name = f"{self.url.replace('.', '_')}"
+            file_name = f"{Browser.url.replace('.', '_')}"
             df.to_html(f'report/{file_name}.html')
             df.to_csv(f'report/{file_name}.csv')
 
@@ -128,4 +115,4 @@ class TestShareLogin(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main(verbosity=2, failfast=True)
+    unittest.main(verbosity=2)
