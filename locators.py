@@ -20,3 +20,6 @@ class PageLocators(object):
     """ Target locations """
     USERNAME = (By.XPATH, '//*[@class="account"]/dl/dd[1]')
     PASSWORD = (By.XPATH, '//*[@class="account"]/dl/dd[2]')
+    SUCCESS_RATE = (By.XPATH, '//*[@class="account"]/dl/dd[@class="stats"]/ul/li[@class]')
+    VOTES = (By.XPATH, '//*[@class="account"]/dl/dd[@class="stats"]/ul/li[2]')
+    LOGIN_AGE = (By.XPATH, '//*[@class="account"]/dl/dd[@class="stats"]/ul/li[3]')

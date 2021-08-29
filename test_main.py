@@ -1,102 +1,131 @@
 import unittest
 import selenium.common.exceptions
+from setup import DriverSetup as Browser
 import pandas as pd
-from setup import DriverSetup
-from datetime import datetime
 
 
-class TestCase(unittest.TestCase):
+class TestShareLogin(unittest.TestCase):
+    """ Retrieve BugMeNot webpage share login """
     @classmethod
     def setUpClass(cls):
         """ Setup class for Webdriver tests """
-        cls.driver = DriverSetup.driver
-        cls.page = DriverSetup.page
-        cls.site = input('SITE: ')
+        cls.url = Browser.page.url(url=input('[URL] : '))
 
-    def test_(self):
-        """ Access page """
+    def setUp(self):
+        """ Wait for amount of time each test """
+        Browser.page.implicitly_wait()
+
+    def test_page(self):
+        """ Access BugMeNot page """
         try:
-            self.url = f'http://bugmenot.com/view/{self.site}'
-            self.driver.get(self.url)
+            self.assertEqual(Browser.driver.title[-8:], 'BugMeNot')
 
         except selenium.common.exceptions.WebDriverException:
-            print(f'Can access "{self.site}", please verify you internet or proxy connection.')
-            DriverSetup().close_browser()
+            """ Close browser on failure """
+            Browser().close_browser()
 
-    def test_not_found(self):
+    @classmethod
+    def test_not_found(cls):
         """ Seek 'not found' response """
         try:
-            print(f'CHECK: invalid results "{self.site}" response...')
-            self.page.not_found()
-            print(f'ERROR: Site not found "{self.site}" is invalid.')
+            Browser.page.not_found()
 
         except selenium.common.exceptions.TimeoutException:
-            print(f'CHECK: results found {self.site}.')
+            """ 'Not found' response not found """
 
-    def test_denied(self):
+    @classmethod
+    def test_denied(cls):
         """ Seek 'denied' response """
         try:
-            print(f'CHECK: "{self.site}" allowed results response...')
-            self.page.denied()
-            print(f'ERROR: "{self.site}" is denied for results.')
+            Browser.page.denied()
 
         except selenium.common.exceptions.TimeoutException:
-            print(f'CHECK: results allowed {self.site}.')
+            """ Denied response not found """
 
     def test_username(self):
-        """ Assert site usernames """
-        self.assertIsNotNone(self.page.username)
+        """ Assert usernames """
+        for username in Browser.page.username():
+            self.assertIsNotNone(username)
 
     def test_password(self):
-        """ Assert site password """
-        self.assertIsNotNone(self.page.password)
+        """ Assert passwords """
+        for password in Browser.page.password():
+            self.assertIsNotNone(password)
+
+    def test_success_rate(self):
+        """ Assert success rate """
+        for success_rate in Browser.page.success_rate():
+            self.assertIsNotNone(success_rate)
+
+    def test_votes(self):
+        """ Assert votes """
+        for votes in Browser.page.votes():
+            self.assertIsNotNone(votes)
+
+    def test_login_age(self):
+        """ Assert login ages """
+        for login_age in Browser.page.login_age():
+            self.assertIsNotNone(login_age)
 
     def test_table_creation(self):
         """ Create a table based on Username and Password results """
 
-        """ Store Usernames in array """
+        """ Store login information in arrays"""
         username_row = []
-        for username in self.page.username():
+        for username in Browser.page.username():
             username_row.append(username.text)
 
-        """ Store Password in array """
+        """ Store login information in arrays"""
         password_row = []
-        for password in self.page.password():
+        for password in Browser.page.password():
             password_row.append(password.text)
 
-        """ Create a sheet key with arrays containing the Username and Password """
+        """ Store login information in arrays"""
+        success_rate_row = []
+        for success_rate in Browser.page.success_rate():
+            success_rate_row.append(success_rate.text[:-12])
+
+        """ Store login information in arrays"""
+        votes_row = []
+        for votes in Browser.page.votes():
+            votes_row.append(votes.text[:-5])
+
+        """ Store login information in arrays"""
+        login_age_row = []
+        for login_age in Browser.page.login_age():
+            login_age_row.append(login_age.text[:-3])
+
+        """ Create a dictionary with arrays from all logins """
         sheet = {
             'Username': username_row,
-            'Password': password_row
+            'Password': password_row,
+            'Success_Rate': success_rate_row,
+            'Votes': votes_row,
+            'Login_Age': login_age_row
         }
 
         """ Build a table output from sheet """
+        df = pd.DataFrame(sheet)
         try:
-            df = pd.DataFrame(sheet)
-            print(f'SUCCESS: Displaying accounts in "{self.site}".\n')
-            print(df)
+            """ Save table as file in 'report' folder
+            Format example: 'test_com.html' """
 
-            """ Save table as file 
-            Format example: testcom_01Jan2008.html
-            """
-            file_name = f"{self.site.replace('.', '')}_{datetime.now().strftime('%d%b%Y')}"
-            print(f'File saved as "{file_name}"')
-            df.to_html(f'{file_name}.html')
+            file_name = f"{self.url.replace('.', '_')}"
+            df.to_html(f'report/{file_name}.html')
+            df.to_csv(f'report/{file_name}.csv')
 
         except ResourceWarning:
             """ Exception while file is opened by system """
 
-            print('Please, try close table output files!')
         except PermissionError:
             """ Exception while file is opened by system """
-
-            print('Please, try close table output files!')
+        print(df)
 
     @classmethod
     def tearDownClass(cls):
-        """ End of test """
-        DriverSetup().close_browser()
+        """ End of test"""
+        Browser().close_browser()
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=2, failfast=True)

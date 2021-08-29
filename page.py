@@ -19,12 +19,18 @@ class PageObject(object):
         self.driver = driver
         self.locator = Locators
 
-        """ The <seconds_time> time to wait for elements appear on page 
-        2 - May cause issues, but fast
-        5 - Stable 
-        """
-        seconds_time = 5
-        self.wait = WebDriverWait(self.driver, seconds_time)
+        """ The <seconds_time> time to wait for elements appear on page """
+        self.seconds_time = 2
+        self.wait = WebDriverWait(self.driver, self.seconds_time)
+
+    def url(self, url):
+        """ Search shared login based on URL argument """
+        self.driver.get(f'http://bugmenot.com/view/{url}')
+        return url
+
+    def implicitly_wait(self):
+        """ Wait elements on page """
+        self.driver.implicitly_wait(self.seconds_time)
 
     def not_found(self):
         """ Return page object """
@@ -34,12 +40,30 @@ class PageObject(object):
         """ Return page object """
         return self.wait.until(EC.visibility_of_element_located((Locators.DENIED)))
 
+    """ Returns all share login information:
+    Username, Password, Success rate, Votes and Login age.
+    """
     def username(self):
-        """ Return all username found """
+        """ Return values """
         for username in self.wait.until(EC.visibility_of_all_elements_located((Locators.USERNAME))):
             yield username
 
     def password(self):
-        """ Return all password found """
+        """ Return values """
         for password in self.wait.until(EC.visibility_of_all_elements_located((Locators.PASSWORD))):
             yield password
+
+    def success_rate(self):
+        """ Return values """
+        for success_rate in self.wait.until(EC.visibility_of_all_elements_located((Locators.SUCCESS_RATE))):
+            yield success_rate
+
+    def votes(self):
+        """ Return values """
+        for votes in self.wait.until(EC.visibility_of_all_elements_located((Locators.VOTES))):
+            yield votes
+
+    def login_age(self):
+        """ Return values """
+        for login_age in self.wait.until(EC.visibility_of_all_elements_located((Locators.LOGIN_AGE))):
+            yield login_age

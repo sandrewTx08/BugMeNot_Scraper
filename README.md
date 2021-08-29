@@ -2,14 +2,15 @@
 <img src="http://bugmenot.com/assets/img/logo.png">
 
 # BugMeNot_Scraper
-### Retrieve BugMeNot webpage share login.
+Retrieve BugMeNot webpage share login through _Page Object Model_ (POM), exporting results.
 
 # Goal:
 ### Return share login information:
 - **Username**
 - **Password**
-
-So on  and other attributes.
+- **Success rate**
+- **Votes**
+- **Login age**
 
 # Tools utilized & Requirements:
 - ### Browser automation:
@@ -25,30 +26,44 @@ So on  and other attributes.
       <th></th>
       <th>Username</th>
       <th>Password</th>
+      <th>Success_Rate</th>
+      <th>Votes</th>
+      <th>Login_Age</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>test.account1@email.com</td>
-      <td>passwordTEST1</td>
+      <td>testaccount@email.com</td>
+      <td>passwordTest</td>
+      <td>64%</td>
+      <td>45</td>
+      <td>5 months</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>test.account2@email.com</td>
-      <td>passwordTEST2</td>
+      <td>testingfakeaccount</td>
+      <td>passfake123</td>
+      <td>39%</td>
+      <td>201</td>
+      <td>7 months</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>test.account3@email.com</td>
-      <td>passwordTEST3</td>
+      <td>fakeaccount</td>
+      <td>123456</td>
+      <td>13%</td>
+      <td>616</td>
+      <td>2 years</td>
     </tr>
   </tbody>
 </table>
 
+#### File saved as: `/report/site_com.html`  
+
 # Usage:
 ### 1. Download all requirements and install it.
 2. Execute the `python test_main.py`
-3. Type a site with some kind of authentication
-4. Scraping logins
-5. A table is created in **HTML** format
+3. Type URL
+4. Wait scraping logins
+5. A table is created in **HTML** and **CSV** format.
