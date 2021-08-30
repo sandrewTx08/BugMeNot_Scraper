@@ -26,6 +26,7 @@ class Test_A_ShareLogin(unittest.TestCase):
 
         except selenium.common.exceptions.TimeoutException:
             """ Denied response not found """
+        return
 
     def test_C_username(self):
         """ Assert usernames """
@@ -57,46 +58,57 @@ class Test_B_Table(unittest.TestCase):
     """ Create a table based on Username and Password results """
 
     def test_A_create_table(self):
-        """ Store login information in arrays"""
-        username_row = []
-        for username in Browser.page.username():
-            username_row.append(username.text)
-
-        """ Store login information in arrays"""
-        password_row = []
-        for password in Browser.page.password():
-            password_row.append(password.text)
-
-        """ Store login information in arrays"""
-        success_rate_row = []
-        for success_rate in Browser.page.success_rate():
-            success_rate_row.append(success_rate.text[:-12])
-
-        """ Store login information in arrays"""
-        votes_row = []
-        for votes in Browser.page.votes():
-            votes_row.append(votes.text[:-5])
-
-        """ Store login information in arrays"""
-        login_age_row = []
-        for login_age in Browser.page.login_age():
-            login_age_row.append(login_age.text[:-3])
-
         """ Create a dictionary with arrays from all logins """
-        sheet = {
-            'Username': username_row,
-            'Password': password_row,
-            'Success_Rate': success_rate_row,
-            'Votes': votes_row,
-            'Login_Age': login_age_row
+
+        def test_A_username():
+            """ Append attribute in arrays """
+            username_row = []
+            for username in Browser.page.username():
+                username_row.append(username.text)
+            return username_row
+
+        def test_B_password():
+            """ Append attribute in arrays """
+            password_row = []
+            for password in Browser.page.password():
+                password_row.append(password.text)
+            return password_row
+
+        def test_C_sucess_rate():
+            """ Append attribute in arrays """
+            success_rate_row = []
+            for success_rate in Browser.page.success_rate():
+                success_rate_row.append(success_rate.text[:-12])
+            return success_rate_row
+
+        def test_D_votes():
+            """ Append attribute in arrays """
+            votes_row = []
+            for votes in Browser.page.votes():
+                votes_row.append(votes.text[:-5])
+            return votes_row
+
+        def test_E_login_age():
+            """ Append attribute in arrays """
+            login_age_row = []
+            for login_age in Browser.page.login_age():
+                login_age_row.append(login_age.text[:-3])
+            return login_age_row
+
+        return {
+            'Username': test_A_username(),
+            'Password': test_B_password(),
+            'Success_Rate': test_C_sucess_rate(),
+            'Votes': test_D_votes(),
+            'Login_Age': test_E_login_age()
         }
 
-        """ Build a table output from sheet """
-        df = pd.DataFrame(sheet)
+    def test_B_save_output(self):
+        """ Save table as file in 'report' folder
+        Format example: 'test_com.html' """
+        df = pd.DataFrame(self.test_A_create_table())
+        print(df)
         try:
-            """ Save table as file in 'report' folder
-            Format example: 'test_com.html' """
-
             file_name = f"{Browser.url.replace('.', '_')}"
             df.to_html(f'report/{file_name}.html')
             df.to_csv(f'report/{file_name}.csv')
@@ -106,7 +118,6 @@ class Test_B_Table(unittest.TestCase):
 
         except PermissionError:
             """ Exception while file is opened by system """
-        print(df)
 
     @classmethod
     def tearDownClass(cls):
