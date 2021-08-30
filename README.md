@@ -75,8 +75,8 @@ All URL inside file document will be executed at BugMeNot search and then a tabl
 
 Files saved as: `/report/site_com.html`  
 ## Tools utilized & Requirements:
--  ###Browser automation:
+-  ### Browser automation:
     `selenium` ChromeWebdriver for browser automation.
 
-- ###Creating Table:
+- ### Creating Table:
     `pandas` creates table containing all find share login.
