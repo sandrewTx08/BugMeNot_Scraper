@@ -40,4 +40,5 @@ class DriverSetup:
     page = Page(driver)
 
     """ URL """
-    url = page.url(input('[URL] : '))
+    url = page.url('site.com')
+
