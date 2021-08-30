@@ -5,7 +5,7 @@ import pandas as pd
 
 
 class Test_A_ShareLogin(unittest.TestCase):
-    """ Retrieve BugMeNot webpage share login """
+    """ Test all share logins attributes """
 
     def setUp(self):
         """ Wait for amount of time each test """
@@ -26,81 +26,73 @@ class Test_A_ShareLogin(unittest.TestCase):
 
         except selenium.common.exceptions.TimeoutException:
             """ Denied response not found """
-        return
 
     def test_C_username(self):
-        """ Assert usernames """
+        """ Test usernames """
+        username_row = []
         for username in Browser.page.username():
+            """ Assert usernames """
             self.assertIsNotNone(username)
 
+            """ Append attribute in arrays """
+            username_row.append(username.text)
+        return username_row
+
     def test_D_password(self):
-        """ Assert passwords """
+        """ Test passwords """
+        password_row = []
         for password in Browser.page.password():
+            """ Assert passwords """
             self.assertIsNotNone(password)
 
+            """ Append attribute in arrays """
+            password_row.append(password.text)
+        return password_row
+
     def test_E_success_rate(self):
-        """ Assert success rate """
+        """ Test success rates """
+        success_rate_row = []
         for success_rate in Browser.page.success_rate():
+            """ Assert success rate """
             self.assertIsNotNone(success_rate)
 
+            """ Append attribute in arrays """
+            success_rate_row.append(success_rate.text[:-12])
+        return success_rate_row
+
     def test_F_votes(self):
-        """ Assert votes """
+        """ Test votes """
+        votes_row = []
         for votes in Browser.page.votes():
+            """ Assert votes """
             self.assertIsNotNone(votes)
 
+            """ Append attribute in arrays """
+            votes_row.append(votes.text[:-5])
+        return votes_row
+
     def test_G_login_age(self):
-        """ Assert login ages """
+        """ Test login ages """
+        login_age_row = []
         for login_age in Browser.page.login_age():
+            """ Assert login ages """
             self.assertIsNotNone(login_age)
+
+            """ Append attribute in arrays """
+            login_age_row.append(login_age.text[:-3])
+        return login_age_row
 
 
 class Test_B_Table(unittest.TestCase):
     """ Create a table based on Username and Password results """
-
     def test_A_create_table(self):
         """ Create a dictionary with arrays from all logins """
-
-        def test_A_username():
-            """ Append attribute in arrays """
-            username_row = []
-            for username in Browser.page.username():
-                username_row.append(username.text)
-            return username_row
-
-        def test_B_password():
-            """ Append attribute in arrays """
-            password_row = []
-            for password in Browser.page.password():
-                password_row.append(password.text)
-            return password_row
-
-        def test_C_sucess_rate():
-            """ Append attribute in arrays """
-            success_rate_row = []
-            for success_rate in Browser.page.success_rate():
-                success_rate_row.append(success_rate.text[:-12])
-            return success_rate_row
-
-        def test_D_votes():
-            """ Append attribute in arrays """
-            votes_row = []
-            for votes in Browser.page.votes():
-                votes_row.append(votes.text[:-5])
-            return votes_row
-
-        def test_E_login_age():
-            """ Append attribute in arrays """
-            login_age_row = []
-            for login_age in Browser.page.login_age():
-                login_age_row.append(login_age.text[:-3])
-            return login_age_row
-
         return {
-            'Username': test_A_username(),
-            'Password': test_B_password(),
-            'Success_Rate': test_C_sucess_rate(),
-            'Votes': test_D_votes(),
-            'Login_Age': test_E_login_age()
+            'Username': Test_A_ShareLogin().test_C_username(),
+            'Password': Test_A_ShareLogin().test_D_password(),
+            'Success_Rate': Test_A_ShareLogin().test_E_success_rate(),
+            'Votes': Test_A_ShareLogin().test_F_votes(),
+            'Login_Age': Test_A_ShareLogin().test_G_login_age()
         }
 
     def test_B_save_output(self):
