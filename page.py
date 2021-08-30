@@ -67,3 +67,7 @@ class PageObject(object):
         """ Return values """
         for login_age in self.wait.until(EC.visibility_of_all_elements_located((Locators.LOGIN_AGE))):
             yield login_age
+
+    def other(self):
+        for other in self.wait.until(EC.visibility_of_all_elements_located((Locators.OTHER))):
+            yield other

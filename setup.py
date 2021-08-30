@@ -33,7 +33,7 @@ class DriverSetup:
     chrome_options.add_argument("--incognito")
     chrome_options.add_argument("--verbose")
 
-    """ Load webdriver """
+    """ Load Webdriver """
     driver = webdriver.Chrome(driver_path, options=chrome_options)
 
     """ Page Object """
