@@ -21,7 +21,7 @@ Retrieve BugMeNot webpage share login through _Page Object Model_ (POM), exporti
 
 ### Colect all share login data from a file list!.
 1. Assure `url_list.text` is in project folder.
-2. Execute `test_automated_list.py`.
+2. Execute `python test_automated_list.py`.
 3. Wait until run all URL inside document lines is done.
 
 #### Document example:
