@@ -38,7 +38,3 @@ class DriverSetup:
 
     """ Page Object """
     page = Page(driver)
-
-    """ URL """
-    url = page.url('site.com')
-
