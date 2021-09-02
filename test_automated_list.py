@@ -6,7 +6,7 @@ import pandas as pd
 class Test_A_AutomatedList(unittest.TestCase):
     """ Colect all share login data from a file list """
 
-    def test_A1_automatedlist(self):
+    def test_A2_automatedlist(self):
         """ Execution of automated list """
 
         username_row = []
@@ -81,12 +81,32 @@ class Test_A_AutomatedList(unittest.TestCase):
         4. Appended row are cleaned
         5. Back to loop until lines is read and executed
         """
-        with open(r'.\url_list.txt', 'r', newline='') as url_list:
+        list_file_name = 'url_list.txt'
+        with open(f'.\\{list_file_name}', 'r', newline='') as url_list:
+
+            def count_lines():
+                with open(f'.\\{list_file_name}', 'r', newline='') as url_list:
+                    for count, line in enumerate(url_list):
+                        pass
+                return count + 1
+
+            lines_len = count_lines()
+            counter = 0
+
             for line in url_list.readlines():
                 Browser.page.url(line)
+
+                counter += 1
+                line = line.replace('\r\n', '')
+                print(f'COUNTER:[{counter}] / MAX:[{lines_len}] | SITE:[{line}]')
+
+                if counter == lines_len:
+                    print('SUCCESS EVERY LOGIN CATALOGED!')
+
                 append_rows()
                 save_output()
                 append_rows_clear()
+
             url_list.close()
 
     @classmethod
